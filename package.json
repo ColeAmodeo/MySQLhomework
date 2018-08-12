@@ -1,0 +1,23 @@
+{
+  "name": "mysqlhomework",
+  "version": "1.0.0",
+  "description": "CLI amazon APP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ColeAmodeo/MySQLhomework.git"
+  },
+  "author": "Cole",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ColeAmodeo/MySQLhomework/issues"
+  },
+  "homepage": "https://github.com/ColeAmodeo/MySQLhomework#readme",
+  "dependencies": {
+    "inquirer": "^6.1.0",
+    "mysql": "^2.16.0"
+  }
+}
