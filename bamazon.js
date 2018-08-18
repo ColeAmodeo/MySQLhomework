@@ -1,5 +1,6 @@
 var mysql  = require("mysql");
 var inquirer = require("inquirer");
+
 var newLine = "\n +++++++++++++++++++++ \n"
 
 
@@ -15,7 +16,7 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   logStock();
-  
+
 });
 
 
@@ -43,17 +44,41 @@ function startApp() {
     message: "How much of the product would you like to purchase?"
   }
 ]).then(function(input){
-  var index = input.product - 1
-  var quantity = input.quantity
+  var index = parseInt(input.product) - 1
+  var quantity = parseInt(input.quantity)
   var query = connection.query("SELECT * FROM bamazon.products",
-  function(err,resp) {
-         if (err) throw (err)
-         if (quantity > resp[index].quantity) {
-           console.log(newLine)
-           console.log("Sorry! Insufficient Stock!")
-         }
+    function(err,resp) {
+    if (err) throw (err)
+    //Check values
+    console.log("ID: "+index)
+    console.log("Product: " + resp[index].product)
+    console.log("Quantity Purchased: " + quantity)
+    var price = parseInt(resp[index].price)
+    console.log("Price: " + price)
+      //Check if stock is there
+      if (quantity > resp[index].stock) {
+        console.log(newLine)
+        console.log("Sorry! Insufficient Stock!")
+      } else
+      console.log(newLine)
+      console.log("Thank you! Successful Sale!")
+        var newStock = resp[index].stock - quantity
+        connection.query("UPDATE bamazon.products SET ? WHERE ?",
+        [{
+            stock: newStock
+         },{
+            id: index
+        }],
+        function(err, resp) {
+        if (err) throw (err)
+        console.log(newLine)
+        console.log("Updated Stock: " + newStock + " left")
+        console.log(newLine)
+        console.log("Transaction Receipt")
+        console.log("Total cost: $" + (quantity * price))
+        connection.end()
+      })
+
+    })
   })
-
-
-})
 }
